@@ -1,0 +1,30 @@
+From 17b0977322ab34a07dd4bb6d62675e7c1a0d76a9 Mon Sep 17 00:00:00 2001
+From: "Richard J. Knight" <rjknight@us.ibm.com>
+Date: Tue, 8 Oct 2019 17:27:29 +0000
+Subject: [PATCH] Update default data path
+
+---
+ samples/python/common.py | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/samples/python/common.py b/python/common.py
+index 39ce50d..2120551 100644
+--- a/samples/python/common.py
++++ b/samples/python/common.py
+@@ -78,9 +78,11 @@ def find_sample_data(description="Runs a TensorRT Python sample", subfolder="",
+     Returns:
+         str: Path of data directory.
+     '''
+-
++    
++    default_path = os.path.join(os.environ.get('CONDA_PREFIX', ''),'samples/tensorrt')
++    trt_sample_root = os.environ.get('TRT_SAMPLE_ROOT', default_path)
++    kDEFAULT_DATA_ROOT = os.path.join(trt_sample_root,'data')
+     # Standard command-line arguments for all samples.
+-    kDEFAULT_DATA_ROOT = os.path.join(os.sep, "usr", "src", "tensorrt", "data")
+     parser = argparse.ArgumentParser(description=description, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+     parser.add_argument("-d", "--datadir", help="Location of the TensorRT sample data directory, and any additional data directories.", action="append", default=[kDEFAULT_DATA_ROOT])
+     args, _ = parser.parse_known_args()
+-- 
+1.8.3.1
+

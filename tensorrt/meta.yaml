@@ -1,0 +1,109 @@
+{% set tensorrt_version = "7.0.0.11" %}
+{% set sha256 = "03ce0427686e19d60919f6ba68dea5446a26ac53f4398bdea4ec96aec30740e7" %}    #[ppc64le]
+{% set trt_tar = "TensorRT-7.0.0.11.CentOS-7.6.ppc64le-gnu.cuda-10.2.cudnn7.6.tar.gz" %} #[ppc64le]
+
+{% set sha256 = "92fab8aa1de9e5bb6904940e840d553bf64caf39ed5fd6a749297c95e3619051" %}    #[x86_64]
+{% set trt_tar = "TensorRT-7.0.0.11.CentOS-7.6.x86_64-gnu.cuda-10.2.cudnn7.6.tar.gz" %}  #[x86_64]
+
+{% set trt_tar_dir =  environ.get('LOCAL_SRC_DIR', 0) %}
+
+package:
+  name: tensorrt
+  version: {{ tensorrt_version }}
+
+source:
+  - url: file:/{{ trt_tar_dir }}/{{ trt_tar }}
+    sha256: {{ sha256 }}                        
+    patches:
+       - update-Makefile.conf-for-conda-builds.patch
+       - update-default-data-path.patch
+       - fix-yolov3-for-py3x.patch
+    folder: tensorrt
+
+  - git_url: "https://github.com/NVIDIA/TensorRT.git"
+    git_tag: v7.0.0
+    patches:
+       - fix-GLIBC_2.14-link-issue-with-libnvinfer.so.patch # [x86_64]
+       - modified-print-function-syntax-as-per-py3.patch
+       - add-makefiles-for-new-samples.patch
+       - add-build-onnx2trt-flag.patch
+       - only-install-onnx2trt.patch
+       - fix-libcaffeparser-name-for-samples.patch
+       - trtexec-int8-cal-fix.patch
+    folder: TensorRT
+
+build:
+  number: 1
+  string: cuda{{ cudatoolkit | replace(".*", "") }}_py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }}
+  activate_in_script: True
+
+outputs:
+   - name: tensorrt
+     script: build-tensorrt.sh
+     requirements:
+         build:
+           - {{ compiler('cxx') }}
+           - cmake {{ cmake }}
+           - make {{ make }}
+         host:
+           - python {{ python }}
+           - cudatoolkit-dev {{ cudatoolkit }}
+           - protobuf {{ protobuf }}
+           - libprotobuf {{ protobuf }}
+           - cudnn {{ cudnn }}
+
+         run:
+           - python {{ python }}
+           - cudatoolkit {{ cudatoolkit }}
+           - protobuf {{ protobuf }}
+           - libprotobuf {{ protobuf }}
+           - cudnn {{ cudnn }}
+           - numpy {{ numpy }}
+           - uff {{ uff }}
+           - graphsurgeon {{ graphsurgeon }}
+
+   - name: tensorrt-samples
+     script: build-tensorrt-samples.sh
+     requirements:
+         build:
+           - {{ compiler('cxx') }}
+           - cmake {{ cmake }}
+           - make {{ make }}
+         host:
+           - python {{ python }}
+           - cudatoolkit-dev {{ cudatoolkit }}
+           - protobuf {{ protobuf }}
+           - libprotobuf {{ protobuf }}
+           - cudnn {{ cudnn }}
+           - tensorrt {{ tensorrt_version }}
+
+         run:
+           - decorator
+           - pywget
+           - tensorrt {{ tensorrt_version }}
+           - python {{ python }}
+           - onnx {{ onnx }}
+           - typing {{ typing }}
+           - pillow {{ pillow }}
+           - requests {{ requests }}
+           - cmake {{ cmake }}
+           - make  {{ make }}
+           - cudatoolkit-dev {{ cudatoolkit }}
+           - numpy {{ numpy }}
+           - gxx_linux-64       {{ cxx_compiler_version }} # [x86_64]
+           - gxx_linux-ppc64le  {{ cxx_compiler_version }} # [ppc64le]
+
+about:
+  home: https://developer.nvidia.com/tensorrt
+  license: NVIDIA Software License, Apache-2.0
+  summary: TensorRT is a C++ library for high performance inference on NVIDIA GPUs and deep learning accelerators.
+  description: |
+    NVIDIA TensorRT is a platform for high-performance deep learning inference. 
+    It includes a deep learning inference optimizer and runtime that delivers low 
+    latency and high-throughput for deep learning inference applications.
+  dev_url: https://github.com/NVIDIA/TensorRT/
+  doc_url: https://docs.nvidia.com/deeplearning/sdk/tensorrt-developer-guide/index.html
+
+extra:
+  recipe-maintainers:
+    - open-ce/open-ce-dev-team
