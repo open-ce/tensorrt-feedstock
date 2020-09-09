@@ -1,0 +1,12 @@
+recipes:
+  - name : graphsurgeon
+    path : tensorrt-graphsurgeon
+    local_src_dir: ../../local_files
+
+  - name : uff
+    path : tensorrt-uff
+    local_src_dir: ../../local_files
+
+  - name : tensorrt
+    path : tensorrt
+    local_src_dir: ../../local_files

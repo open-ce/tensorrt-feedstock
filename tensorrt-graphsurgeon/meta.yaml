@@ -1,0 +1,41 @@
+{% set version = "0.4.1" %}
+{% set sha256 = "03ce0427686e19d60919f6ba68dea5446a26ac53f4398bdea4ec96aec30740e7" %}    #[ppc64le]
+{% set trt_tar = "TensorRT-7.0.0.11.CentOS-7.6.ppc64le-gnu.cuda-10.2.cudnn7.6.tar.gz" %} #[ppc64le]
+
+{% set sha256 = "92fab8aa1de9e5bb6904940e840d553bf64caf39ed5fd6a749297c95e3619051" %}    #[x86_64]
+{% set trt_tar = "TensorRT-7.0.0.11.CentOS-7.6.x86_64-gnu.cuda-10.2.cudnn7.6.tar.gz" %}  #[x86_64]
+
+{% set trt_tar_dir =  environ.get('LOCAL_SRC_DIR', 0) %}
+
+package:
+  name: graphsurgeon
+  version: {{ version }} 
+
+source:
+  - url: file://{{ trt_tar_dir }}/{{ trt_tar }}
+    sha256: {{ sha256 }}
+    folder: tensorrt
+
+build:
+  number: 1
+  string: py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }}
+  
+requirements:
+  host:
+    - python {{ python }}
+    - wheel {{ wheel }}
+  run:
+    - python {{ python }}
+
+about:
+  home: https://developer.nvidia.com/tensorrt
+  license: NVIDIA Software License
+  summary: graphsurgeon allows you to transform TensorFlow graphs.
+  description: |
+    graphsurgeon allows you to transform TensorFlow graphs. Its capabilities are broadly divided into two categories - search and manipulation. 
+    Search functions allow you to find nodes in a TensorFlow graph. Manipulation functions allow you to modify, add, or remove nodes.
+  doc_url: https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/graphsurgeon/graphsurgeon.html
+
+extra:
+  recipe-maintainers:
+    - open-ce/open-ce-dev-team

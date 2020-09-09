@@ -1,0 +1,22 @@
+diff --git a/samples/CMakeSamplesTemplate.txt b/samples/CMakeSamplesTemplate.txt
+index 8b0dcec..a8ff59c 100644
+--- a/samples/CMakeSamplesTemplate.txt
++++ b/samples/CMakeSamplesTemplate.txt
+@@ -61,7 +61,7 @@ if(BUILD_PLUGINS)
+ endif()
+ 
+ if(BUILD_PARSERS)
+-    list(APPEND DEPS_LIST nvuffparser nvcaffeparser nvonnxparser)
++    list(APPEND DEPS_LIST nvuffparser nvcaffe_parser nvonnxparser)
+ endif()
+ 
+ if(BUILD_PLUGINS OR BUILD_PARSERS)
+@@ -102,7 +102,7 @@ if(${PLUGINS_NEEDED})
+ endif()
+ 
+ if("caffe" IN_LIST SAMPLE_PARSERS)
+-    list(APPEND SAMPLE_DEP_LIBS nvcaffeparser)
++    list(APPEND SAMPLE_DEP_LIBS nvcaffe_parser)
+ endif()
+ 
+ if("onnx" IN_LIST SAMPLE_PARSERS)

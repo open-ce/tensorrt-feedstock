@@ -1,0 +1,32 @@
+diff -Naur uff/converters/tensorflow/conversion_helpers.py uff_mod/converters/tensorflow/conversion_helpers.py
+--- uff/converters/tensorflow/conversion_helpers.py	2020-01-21 14:24:20.725304045 +0000
++++ uff_mod/converters/tensorflow/conversion_helpers.py	2020-01-21 16:09:36.510076745 +0000
+@@ -15,7 +15,7 @@
+ try:
+     from tensorflow.python.platform import gfile
+     import tensorflow as tf
+-    from tensorflow import GraphDef
++    from tensorflow.compat.v1 import GraphDef
+ except ImportError as err:
+     raise ImportError("""ERROR: Failed to import module ({})
+ Please make sure you have TensorFlow installed.
+@@ -224,6 +224,6 @@
+         serialized UFF MetaGraph (str), graph inputs (list(tensorflow.NodeDef)), graph outputs (list(tensorflow.NodeDef))
+     """
+     graphdef = GraphDef()
+-    with tf.gfile.GFile(frozen_file, "rb") as frozen_pb:
++    with tf.io.gfile.GFile(frozen_file, "rb") as frozen_pb:
+         graphdef.ParseFromString(frozen_pb.read())
+     return from_tensorflow(graphdef, output_nodes, preprocessor, **kwargs)
+diff -Naur uff/converters/tensorflow/converter.py uff_mod/converters/tensorflow/converter.py
+--- uff/converters/tensorflow/converter.py	2020-01-21 14:24:20.725304045 +0000
++++ uff_mod/converters/tensorflow/converter.py	2020-01-21 14:26:56.601700148 +0000
+@@ -176,7 +176,7 @@
+ 
+     @classmethod
+     def convert_tf2uff_field(cls, code, val):
+-        if isinstance(val, tf.AttrValue):
++        if isinstance(val, tf.compat.v1.AttrValue):
+             val = getattr(val, code)
+         if code == 'i':
+             return int(val)
