@@ -1,0 +1,25 @@
+From b5fad7d62ab294d70bf646323f622cf105090f3b Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Wed, 16 Sep 2020 15:23:33 +0000
+Subject: [PATCH] Fixed samples CMakeLists for conda builds
+
+---
+ samples/CMakeSamplesTemplate.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/samples/CMakeSamplesTemplate.txt b/samples/CMakeSamplesTemplate.txt
+index 8b0dcec..f88985e 100644
+--- a/samples/CMakeSamplesTemplate.txt
++++ b/samples/CMakeSamplesTemplate.txt
+@@ -27,7 +27,7 @@ set(TARGET_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+ get_filename_component(SAMPLES_DIR ../../ ABSOLUTE)
+ get_filename_component(SAMPLE_DIR_NAME ${TARGET_DIR} NAME)
+ 
+-set(CUDA_INSTALL_DIR /usr/local/cuda)
++set(CUDA_INSTALL_DIR $CONDA_PREFIX)
+ 
+ # SAMPLES_COMMON_SOURCES
+ set(SAMPLES_COMMON_SOURCES
+-- 
+2.23.0
+

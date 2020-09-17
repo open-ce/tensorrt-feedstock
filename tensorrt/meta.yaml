@@ -15,21 +15,28 @@ source:
   - url: file:/{{ trt_tar_dir }}/{{ trt_tar }}
     sha256: {{ sha256 }}                        
     patches:
-       - update-Makefile.conf-for-conda-builds.patch
-       - update-default-data-path.patch
-       - fix-yolov3-for-py3x.patch
+       # 02xx - GPU only patch specific to open-ce (maybe)
+       - 0204-update-Makefile.conf-for-conda-builds.patch
+       - 0205-update-default-data-path.patch
+
+       # 03xx - patch temporary to fix a problem that when fixed upstream can be removed
+       - 0303-fix-yolov3-for-py3x.patch 
     folder: tensorrt
 
   - git_url: "https://github.com/NVIDIA/TensorRT.git"
     git_tag: v7.0.0
     patches:
-       - fix-GLIBC_2.14-link-issue-with-libnvinfer.so.patch # [x86_64]
-       - modified-print-function-syntax-as-per-py3.patch
-       - add-makefiles-for-new-samples.patch
-       - add-build-onnx2trt-flag.patch
-       - only-install-onnx2trt.patch
-       - fix-libcaffeparser-name-for-samples.patch
-       - trtexec-int8-cal-fix.patch
+       # 02xx - GPU only patch specific to open-ce (maybe)
+       - 0201-add-build-onnx2trt-flag.patch
+       - 0202-only-install-onnx2trt.patch
+       - 0203-Fixed-samples-CMakeLists-for-conda-builds.patch
+
+       # 03xx - patch temporary to fix a problem that when fixed upstream can be removed
+       - 0301-fix-GLIBC_2.14-link-issue-with-libnvinfer.so.patch # [x86_64]
+       - 0302-Fix-libcaffeparser-name-for-samples.patch
+       - 0304-modified-print-function-syntax-as-per-py3.patch
+       - 0305-trtexec-int8-cal-fix.patch 
+       #- add-makefiles-for-new-samples.patch
     folder: TensorRT
 
 build:

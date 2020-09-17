@@ -21,7 +21,7 @@ export PYTHONUSERBASE=${PREFIX}
 cd ${SRC_DIR}/tensorrt/graphsurgeon
 wheel unpack graphsurgeon-${PKG_VERSION}*.whl
 cd graphsurgeon-${PKG_VERSION}/graphsurgeon
-patch -p1 < ${RECIPE_DIR}/graphsurgeon_tf2.x_compatibility_fixes.patch
+patch -p1 < ${RECIPE_DIR}/0301-graphsurgeon_tf2.x_compatibility_fixes.patch
 cd ../..
 wheel pack graphsurgeon-${PKG_VERSION}
 

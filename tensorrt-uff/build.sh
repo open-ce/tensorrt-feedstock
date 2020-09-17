@@ -20,7 +20,7 @@ export PYTHONUSERBASE=${PREFIX}
 cd ${SRC_DIR}/tensorrt/uff
 wheel unpack uff-${PKG_VERSION}*.whl
 cd uff-${PKG_VERSION}/uff
-patch -p1 < ${RECIPE_DIR}/uff_tf2.x_compatbility_fixes.patch
+patch -p1 < ${RECIPE_DIR}/0301-uff_tf2.x_compatbility_fixes.patch
 cd ../..
 wheel pack uff-${PKG_VERSION}
 
