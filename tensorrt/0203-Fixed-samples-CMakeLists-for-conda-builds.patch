@@ -16,7 +16,7 @@ index 8b0dcec..f88985e 100644
  get_filename_component(SAMPLE_DIR_NAME ${TARGET_DIR} NAME)
  
 -set(CUDA_INSTALL_DIR /usr/local/cuda)
-+set(CUDA_INSTALL_DIR $CONDA_PREFIX)
++set_ifndef(CUDA_INSTALL_DIR /usr/local/cuda)
  
  # SAMPLES_COMMON_SOURCES
  set(SAMPLES_COMMON_SOURCES
