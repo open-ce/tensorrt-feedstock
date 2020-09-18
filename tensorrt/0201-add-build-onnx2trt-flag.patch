@@ -1,3 +1,13 @@
+From 37a55934990aa0e639cf72d815ab93a712ce94a3 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Wed, 16 Sep 2020 13:17:14 +0000
+Subject: [PATCH] add-build-onnx2trt-flag
+
+---
+ CMakeLists.txt         | 3 ++-
+ parsers/CMakeLists.txt | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index b6b189c..0b928e3 100644
 --- a/CMakeLists.txt
@@ -39,3 +49,6 @@ index f6c7ad2..85b250e 100644
 -
 +endif()
  add_subdirectory(onnx)
+-- 
+2.23.0
+

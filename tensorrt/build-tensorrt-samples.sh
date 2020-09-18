@@ -15,7 +15,7 @@ mkdir -p ${PREFIX}/samples/tensorrt/{samples,data}
 # Note: Remove this patch application once NVIDIA fixes this upstream
 CUR_DIR=$(pwd)
 cd ${SRC_DIR}/tensorrt/samples
-patch -p1 < ${RECIPE_DIR}/samples_tf2.x_compatibility_fixes.patch
+patch -p1 < ${RECIPE_DIR}/0306-samples_tf2.x_compatibility_fixes.patch
 cd $CUR_DIR
 
 # copy opensource version of files from the TensorRT repo
@@ -52,7 +52,8 @@ cd build
 
 cmake .. -DBUILD_SAMPLES="ON" -DBUILD_PARSERS="OFF" -DBUILD_PLUGINS="OFF" -DCMAKE_C_COMPILER=${CC} \
          -DCMAKE_CUDA_HOST_COMPILER=${CXX} -DPROTOBUF_VERSION=${protobuf%.*} \
-         -DCMAKE_LIBRARY_PATH="${SYSROOT_DIR}/lib" -DTENSORRT_ROOT=${PREFIX}/ -DCMAKE_INSTALL_PREFIX=${PREFIX}
+         -DCMAKE_LIBRARY_PATH="${SYSROOT_DIR}/lib" -DTENSORRT_ROOT=${PREFIX}/ -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+         -DCUDA_INSTALL_DIR=${PREFIX}
 
 make -j${CPU_COUNT} samples || exit 4
 
