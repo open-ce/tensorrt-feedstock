@@ -1,5 +1,5 @@
---- Makefile.config	2019-12-17 02:22:07.000000000 +0000
-+++ Makefile.config	2020-10-01 18:20:13.758644894 +0000
+--- samples/Makefile.config	2019-12-17 02:22:07.000000000 +0000
++++ samples/Makefile.config	2020-10-01 18:20:13.758644894 +0000
 @@ -10,9 +10,9 @@ ifeq ($(CUDNN_INSTALL_DIR),)
  $(warning CUDNN_INSTALL_DIR variable is not specified, using $$CUDA_INSTALL_DIR by default, use CUDNN_INSTALL_DIR=<cudnn_directory> to change.)
  endif
