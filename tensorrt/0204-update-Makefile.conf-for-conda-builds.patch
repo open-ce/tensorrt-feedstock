@@ -1,5 +1,5 @@
---- samples/Makefile.config	2019-12-17 02:22:07.000000000 +0000
-+++ samples/Makefile.config	2020-10-01 18:20:13.758644894 +0000
+--- samples/Makefile.config	2019-12-16 20:22:07.000000000 -0600
++++ samples/Makefile.config	2020-10-09 12:43:02.289057820 -0500
 @@ -10,9 +10,9 @@ ifeq ($(CUDNN_INSTALL_DIR),)
  $(warning CUDNN_INSTALL_DIR variable is not specified, using $$CUDA_INSTALL_DIR by default, use CUDNN_INSTALL_DIR=<cudnn_directory> to change.)
  endif
@@ -29,12 +29,3 @@
  CUCC = $(CUDA_INSTALL_DIR)/bin/nvcc -m64
  else ifeq ($(TARGET), qnx)
  CC = ${QNX_HOST}/usr/bin/aarch64-unknown-nto-qnx7.0.0-g++
-@@ -99,7 +99,7 @@ ifeq ($(TARGET), qnx)
- COMMON_FLAGS += -D_POSIX_C_SOURCE=200112L -D_QNX_SOURCE -D_FILE_OFFSET_BITS=64 -fpermissive
- endif
- 
--COMMON_LD_FLAGS += $(LIBPATHS) -L$(OUTDIR)
-+COMMON_LD_FLAGS += $(LIBPATHS) -L$(OUTDIR) -Wl,--rpath=$(CONDA_PREFIX)/lib
- 
- OBJDIR    =$(call concat,$(OUTDIR),/chobj)
- DOBJDIR   =$(call concat,$(OUTDIR),/dchobj)
