@@ -1,12 +1,10 @@
---- samples/Makefile.config	2020-01-02 15:00:49.080019527 +0000
-+++ samples/Makefile.config	2020-01-02 15:34:46.216668825 +0000
-@@ -9,10 +9,10 @@
- ifeq ($(CUDNN_INSTALL_DIR),)
+--- samples/Makefile.config	2019-12-16 20:22:07.000000000 -0600
++++ samples/Makefile.config	2020-10-09 12:43:02.289057820 -0500
+@@ -10,9 +10,9 @@ ifeq ($(CUDNN_INSTALL_DIR),)
  $(warning CUDNN_INSTALL_DIR variable is not specified, using $$CUDA_INSTALL_DIR by default, use CUDNN_INSTALL_DIR=<cudnn_directory> to change.)
  endif
--CUDA_INSTALL_DIR?=/usr/local/cuda
+ CUDA_INSTALL_DIR?=/usr/local/cuda
 -CUDNN_INSTALL_DIR?=$(CUDA_INSTALL_DIR)
-+CUDA_INSTALL_DIR?=$(CONDA_PREFIX)
 +CUDNN_INSTALL_DIR?=$(CONDA_PREFIX)
  CUDA_LIBDIR=lib
 -CUDNN_LIBDIR=lib64
@@ -14,22 +12,20 @@
  ifeq ($(TARGET), aarch64)
  ifeq ($(shell uname -m), aarch64)
  CUDA_LIBDIR=lib64
-@@ -26,7 +26,8 @@
- CC = g++
+@@ -22,12 +22,12 @@ CC = aarch64-linux-gnu-g++
+ endif
+ CUCC =$(CUDA_INSTALL_DIR)/bin/nvcc -m64 -ccbin $(CC)
+ else ifeq ($(TARGET), x86_64)
+-CUDA_LIBDIR=lib64
+-CC = g++
++CUDA_LIBDIR=lib
++CC = x86_64-conda_cos6-linux-gnu-g++
  CUCC =$(CUDA_INSTALL_DIR)/bin/nvcc -m64
  else ifeq ($(TARGET), ppc64le)
 -CUDA_LIBDIR=lib64
+-CC = g++
 +CUDA_LIBDIR=lib
-+CUDNN_LIBDIR=lib
- CC = g++
++CC = powerpc64le-conda_cos7-linux-gnu-g++
  CUCC = $(CUDA_INSTALL_DIR)/bin/nvcc -m64
  else ifeq ($(TARGET), qnx)
-@@ -99,7 +100,7 @@
- COMMON_FLAGS += -D_POSIX_C_SOURCE=200112L -D_QNX_SOURCE -D_FILE_OFFSET_BITS=64 -fpermissive
- endif
- 
--COMMON_LD_FLAGS += $(LIBPATHS) -L$(OUTDIR)
-+COMMON_LD_FLAGS += $(LIBPATHS) -L$(OUTDIR) -Wl,--rpath=$(CONDA_PREFIX)/lib
- 
- OBJDIR    =$(call concat,$(OUTDIR),/chobj)
- DOBJDIR   =$(call concat,$(OUTDIR),/dchobj)
+ CC = ${QNX_HOST}/usr/bin/aarch64-unknown-nto-qnx7.0.0-g++
