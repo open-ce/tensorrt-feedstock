@@ -32,7 +32,7 @@ cd build
 
 # only interested in onnx2trt here
 cmake .. -DBUILD_PARSERS="OFF" -DBUILD_PLUGINS="OFF" -DBUILD_SAMPLES="OFF" -DCMAKE_C_COMPILER=${CC} \
-         -DCMAKE_CUDA_HOST_COMPILER=${CXX} -DPROTOBUF_VERSION=${protobuf%.*} \
+         -DCMAKE_CUDA_COMPILER=${CUDA_HOME}/bin/nvcc -DCMAKE_CUDA_HOST_COMPILER=${CXX} -DPROTOBUF_VERSION=${protobuf%.*} \
          -DCMAKE_INSTALL_PREFIX=${PREFIX}
 
 cmake --build . --target install -- -j${CPU_COUNT} || exit 4

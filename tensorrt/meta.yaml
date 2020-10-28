@@ -43,6 +43,8 @@ build:
   number: 2
   string: cuda{{ cudatoolkit | replace(".*", "") }}_py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }}
   activate_in_script: True
+  script_env:
+    - CUDA_HOME
 
 outputs:
    - name: tensorrt
