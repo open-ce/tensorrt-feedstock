@@ -51,9 +51,9 @@ mkdir -p build
 cd build
 
 cmake .. -DBUILD_SAMPLES="ON" -DBUILD_PARSERS="OFF" -DBUILD_PLUGINS="OFF" -DCMAKE_C_COMPILER=${CC} \
-         -DCMAKE_CUDA_HOST_COMPILER=${CXX} -DPROTOBUF_VERSION=${protobuf%.*} \
+         -DCMAKE_CUDA_COMPILER=${CUDA_HOME}/bin/nvcc -DCMAKE_CUDA_HOST_COMPILER=${CXX} -DPROTOBUF_VERSION=${protobuf%.*} \
          -DCMAKE_LIBRARY_PATH="${SYSROOT_DIR}/lib" -DTENSORRT_ROOT=${PREFIX}/ -DCMAKE_INSTALL_PREFIX=${PREFIX} \
-         -DCUDA_INSTALL_DIR=${PREFIX}
+         -DCMAKE_CXX_FLAGS=" -I${PREFIX}/include -I${CUDA_HOME}/include -I/usr/include" -DCUDA_INSTALL_DIR=${PREFIX}
 
 make -j${CPU_COUNT} samples || exit 4
 
