@@ -40,7 +40,7 @@ source:
     folder: TensorRT
 
 build:
-  number: 3
+  number: 4
   string: cuda{{ cudatoolkit | replace(".*", "") }}_py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }}
   activate_in_script: True
   script_env:
@@ -53,7 +53,7 @@ outputs:
          build:
            - {{ compiler('cxx') }}
            - cmake {{ cmake }}
-           - make {{ make }}
+           - make
          host:
            - python {{ python }}
            - protobuf {{ protobuf }}
@@ -76,7 +76,7 @@ outputs:
          build:
            - {{ compiler('cxx') }}
            - cmake {{ cmake }}
-           - make {{ make }}
+           - make
          host:
            - python {{ python }}
            - protobuf {{ protobuf }}
@@ -94,7 +94,7 @@ outputs:
            - pillow {{ pillow }}
            - requests {{ requests }}
            - cmake {{ cmake }}
-           - make  {{ make }}
+           - make
            - numpy {{ numpy }}
            - gxx_linux-64       {{ cxx_compiler_version }} # [x86_64]
            - gxx_linux-ppc64le  {{ cxx_compiler_version }} # [ppc64le]
