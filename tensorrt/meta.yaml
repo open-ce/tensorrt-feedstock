@@ -59,6 +59,8 @@ outputs:
            - protobuf {{ protobuf }}
            - libprotobuf {{ protobuf }}
            - cudnn {{ cudnn }}
+           - libmemcpy_wrapper
+           - libclock_gettime
 
          run:
            - python {{ python }}
@@ -70,6 +72,8 @@ outputs:
            - uff {{ uff }}
            - graphsurgeon {{ graphsurgeon }}
            - onnx-graphsurgeon {{ onnx_graphsurgeon }}
+           - libmemcpy_wrapper
+           - libclock_gettime
 
    - name: tensorrt-samples
      script: build-tensorrt-samples.sh
@@ -84,6 +88,8 @@ outputs:
            - libprotobuf {{ protobuf }}
            - cudnn {{ cudnn }}
            - tensorrt {{ tensorrt_version }}
+           - libmemcpy_wrapper
+           - libclock_gettime
 
          run:
            - decorator
@@ -98,6 +104,8 @@ outputs:
            - numpy {{ numpy }}
            - gxx_linux-64       {{ cxx_compiler_version }} # [x86_64]
            - gxx_linux-ppc64le  {{ cxx_compiler_version }} # [ppc64le]
+           - libmemcpy_wrapper
+           - libclock_gettime
 
 about:
   home: https://developer.nvidia.com/tensorrt
