@@ -15,6 +15,7 @@ export CXXFLAGS="$(echo ${CXXFLAGS} | sed -e 's/ -std=[^ ]*//')"
 
 #add ugly patch for GLIBC_2.14 memcpy
 cp ${RECIPE_DIR}/libmemcpy-2.14.so ${PREFIX}/lib/
+cp ${RECIPE_DIR}/libclock_gettime-2.17.so ${PREFIX}/lib/
 
 # Copy tensorrt files into $PREFIX
 cp -a ${SRC_DIR}/tensorrt/include/* ${PREFIX}/include

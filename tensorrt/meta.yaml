@@ -1,9 +1,10 @@
-{% set tensorrt_version = "7.0.0.11" %}
+{% set tensorrt_version = "7.2.0.13" %}                                                  #[ppc64le]
 {% set sha256 = "03ce0427686e19d60919f6ba68dea5446a26ac53f4398bdea4ec96aec30740e7" %}    #[ppc64le]
-{% set trt_tar = "TensorRT-7.0.0.11.CentOS-7.6.ppc64le-gnu.cuda-10.2.cudnn7.6.tar.gz" %} #[ppc64le]
+{% set trt_tar = "TensorRT-7.2.0.13.CentOS-7.6.ppc64le-gnu.cuda-11.0.cudnn8.0.tar.gz" %} #[ppc64le]
 
-{% set sha256 = "92fab8aa1de9e5bb6904940e840d553bf64caf39ed5fd6a749297c95e3619051" %}    #[x86_64]
-{% set trt_tar = "TensorRT-7.0.0.11.CentOS-7.6.x86_64-gnu.cuda-10.2.cudnn7.6.tar.gz" %}  #[x86_64]
+{% set tensorrt_version = "7.2.1.6" %}                                                  #[x86_64]
+{% set sha256 = "3d42890424e2a2a155df67aaace45d001a95f12d6781008c5dcf62ea480ea664" %}   #[x86_64]
+{% set trt_tar = "TensorRT-7.2.1.6.CentOS-7.6.x86_64-gnu.cuda-11.0.cudnn8.0.tar.gz" %}  #[x86_64]
 
 {% set trt_tar_dir =  environ.get('LOCAL_SRC_DIR', 0) %}
 
@@ -24,7 +25,7 @@ source:
     folder: tensorrt
 
   - git_url: "https://github.com/NVIDIA/TensorRT.git"
-    git_tag: v7.0.0
+    git_tag: 7.2.1
     patches:
        # 02xx - GPU only patch specific to open-ce (maybe)
        - 0201-add-build-onnx2trt-flag.patch
@@ -35,7 +36,6 @@ source:
        - 0301-fix-GLIBC_2.14-link-issue-with-libnvinfer.so.patch # [x86_64]
        - 0302-Fix-libcaffeparser-name-for-samples.patch
        - 0304-modified-print-function-syntax-as-per-py3.patch
-       - 0305-trtexec-int8-cal-fix.patch 
        #- add-makefiles-for-new-samples.patch
     folder: TensorRT
 
@@ -69,6 +69,7 @@ outputs:
            - numpy {{ numpy }}
            - uff {{ uff }}
            - graphsurgeon {{ graphsurgeon }}
+           - onnx-graphsurgeon {{ onnx_graphsurgeon }}
 
    - name: tensorrt-samples
      script: build-tensorrt-samples.sh
@@ -90,7 +91,6 @@ outputs:
            - tensorrt {{ tensorrt_version }}
            - python {{ python }}
            - onnx {{ onnx }}
-           - typing {{ typing }}
            - pillow {{ pillow }}
            - requests {{ requests }}
            - cmake {{ cmake }}

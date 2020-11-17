@@ -1,4 +1,8 @@
 recipes:
+  - name : onnx-graphsurgeon
+    path : tensorrt-onnx-graphsurgeon
+    local_src_dir: ../../local_files
+
   - name : graphsurgeon
     path : tensorrt-graphsurgeon
     local_src_dir: ../../local_files

@@ -1,54 +1,37 @@
-From 37a55934990aa0e639cf72d815ab93a712ce94a3 Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 16 Sep 2020 13:17:14 +0000
-Subject: [PATCH] add-build-onnx2trt-flag
-
----
- CMakeLists.txt         | 3 ++-
- parsers/CMakeLists.txt | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index b6b189c..0b928e3 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -56,6 +56,7 @@ endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+diff -Naur a/TensorRT/CMakeLists.txt b/TensorRT/CMakeLists.txt
+--- a/TensorRT/CMakeLists.txt	2020-11-16 13:51:53.033378417 -0600
++++ b/TensorRT/CMakeLists.txt	2020-11-16 14:00:39.330336219 -0600
+@@ -56,6 +56,7 @@
  option(BUILD_PLUGINS "Build TensorRT plugin" ON)
  option(BUILD_PARSERS "Build TensorRT parsers" ON)
  option(BUILD_SAMPLES "Build TensorRT samples" ON)
 +option(BUILD_ONNX2TRT "Build onnx2trt executable" ON)
- option(NVPARTNER "Build partner repos from source" OFF)
- option(NVINTERNAL "Build in NVIDIA internal source tree" OFF)
  
-@@ -228,7 +229,7 @@ else()
-     find_library_create_target(nvinfer_plugin nvinfer_plugin SHARED ${TRT_BIN_DIR} ${TRT_LIB_DIR})
+ set(CMAKE_CXX_STANDARD 11)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+@@ -184,7 +185,7 @@
+     find_library_create_target(nvinfer_plugin nvinfer_plugin SHARED ${TRT_OUT_DIR} ${TRT_LIB_DIR})
  endif()
  
 -if(BUILD_PARSERS)
 +if(BUILD_PARSERS OR BUILD_ONNX2TRT)
-     add_subdirectory(parsers${NVINTERNAL_SUFFIX})
+     add_subdirectory(parsers)
  else()
-     if(NVPARTNER OR NVINTERNAL)
-diff --git a/parsers/CMakeLists.txt b/parsers/CMakeLists.txt
-index f6c7ad2..85b250e 100644
---- a/parsers/CMakeLists.txt
-+++ b/parsers/CMakeLists.txt
-@@ -13,7 +13,7 @@
- # See the License for the specific language governing permissions and
+     find_library_create_target(nvcaffeparser nvparsers SHARED ${TRT_OUT_DIR} ${TRT_LIB_DIR})
+diff -Naur a/TensorRT/parsers/CMakeLists.txt b/TensorRT/parsers/CMakeLists.txt
+--- a/TensorRT/parsers/CMakeLists.txt	2020-11-16 13:51:53.046378589 -0600
++++ b/TensorRT/parsers/CMakeLists.txt	2020-11-16 14:02:24.536727076 -0600
+@@ -14,6 +14,7 @@
  # limitations under the License.
  #
--
+ 
 +if(BUILD_PARSERS)
  add_custom_target(parsers DEPENDS 
      nvcaffeparserlibs
      nvonnxparser
-@@ -38,5 +38,5 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${TRT_BIN_DIR})
- include_directories(
+@@ -31,4 +32,5 @@
     ${Protobuf_INCLUDE_DIR}
  )
--
+ 
 +endif()
  add_subdirectory(onnx)
--- 
-2.23.0
-
