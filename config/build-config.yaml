@@ -1,9 +1,9 @@
 recipes:
-  - name : libclock_gettime_wrapper
-    path : libclock_gettime_wrapper
+  - name : libclock_gettime_wrapper    #[x86_64]
+    path : libclock_gettime_wrapper    #[x86_64]
 
-  - name : libmemcpy_wrapper
-    path : libmemcpy_wrapper
+  - name : libmemcpy_wrapper           #[x86_64]
+    path : libmemcpy_wrapper           #[x86_64]
 
   - name : onnx-graphsurgeon
     path : tensorrt-onnx-graphsurgeon
