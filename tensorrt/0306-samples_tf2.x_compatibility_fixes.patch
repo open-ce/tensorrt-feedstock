@@ -1,6 +1,6 @@
 diff -Naur samples/python/end_to_end_tensorflow_mnist/README.md samples_mod/python/end_to_end_tensorflow_mnist/README.md
---- samples/python/end_to_end_tensorflow_mnist/README.md	2020-01-30 19:39:00.090019689 +0000
-+++ samples_mod/python/end_to_end_tensorflow_mnist/README.md	2020-01-30 20:23:16.469994763 +0000
+--- samples/python/end_to_end_tensorflow_mnist/README.md	2020-10-06 21:02:27.000000000 +0000
++++ samples_mod/python/end_to_end_tensorflow_mnist/README.md	2020-11-18 04:00:27.661524310 +0000
 @@ -33,14 +33,23 @@
  You can use the following sample code to freeze a Keras model.
  ```
@@ -13,38 +13,38 @@ diff -Naur samples/python/end_to_end_tensorflow_mnist/README.md samples_mod/pyth
 -	# Save the model
 -	with open(filename, "wb") as ofile:
 -		ofile.write(frozen_graph.SerializeToString())
-+    # TF2 style frozen model
-+    # Start with saved model format
-+    tf.saved_model.save(model, "./models")
++     # TF2 style frozen model
++     # Start with saved model format
++     tf.saved_model.save(model, "./models")
 +
-+    # convert to keras model concrete function
-+    full_model = tf.function(lambda x: model(x))
-+    full_model = full_model.get_concrete_function(tf.TensorSpec(model.inputs[0].shape, model.inputs[0].dtype))
++     # convert to keras model concrete function
++     full_model = tf.function(lambda x: model(x))
++     full_model = full_model.get_concrete_function(tf.TensorSpec(model.inputs[0].shape, model.inputs[0].dtype))
 +
-+    # Get frozen ConcreteFunction
-+    frozen_func = convert_variables_to_constants_v2(full_model)
-+    frozen_func.graph.as_graph_def()
++     # Get frozen ConcreteFunction
++     frozen_func = convert_variables_to_constants_v2(full_model)
++     frozen_func.graph.as_graph_def()
 +
-+    # Save frozen graph from frozen ConcreteFunction
-+    tf.io.write_graph(graph_or_graph_def=frozen_func.graph,
-+                      logdir="./models",
-+                      name=filename,
-+                      as_text=False)
++     # Save frozen graph from frozen ConcreteFunction
++     tf.io.write_graph(graph_or_graph_def=frozen_func.graph,
++                       logdir="./models",
++                       name=filename,
++                       as_text=False)
  ```
  
  ## Prerequisites
-@@ -67,7 +76,7 @@
+@@ -69,7 +78,7 @@
  	```
  
  2.  Convert the `.pb` file to `.uff` using the convert-to-uff utility:
 -	`convert-to-uff models/lenet5.pb`
-+	`convert-to-uff lenet5.pb -t -O Identity -o lenet5.uff`
++        `convert-to-uff lenet5.pb -t -O Identity -o lenet5.uff`
  
  	Depending on how you installed TensorRT, this utility may also be located in `/usr/lib/python2.7/dist-packages/uff/bin/convert_to_uff.py` or `/usr/lib/python<PYTHON3 VERSION>/site-packages/uff/bin/convert_to_uff.py`.
  
 diff -Naur samples/python/end_to_end_tensorflow_mnist/model.py samples_mod/python/end_to_end_tensorflow_mnist/model.py
---- samples/python/end_to_end_tensorflow_mnist/model.py	2020-01-30 19:39:00.090019689 +0000
-+++ samples_mod/python/end_to_end_tensorflow_mnist/model.py	2020-01-30 20:21:37.014118152 +0000
+--- samples/python/end_to_end_tensorflow_mnist/model.py	2020-10-06 21:02:27.000000000 +0000
++++ samples_mod/python/end_to_end_tensorflow_mnist/model.py	2020-11-18 04:01:42.630803855 +0000
 @@ -50,6 +50,7 @@
  # This file contains functions for training a TensorFlow model
  import tensorflow as tf
@@ -95,23 +95,24 @@ diff -Naur samples/python/end_to_end_tensorflow_mnist/model.py samples_mod/pytho
  if __name__ == '__main__':
      main()
 diff -Naur samples/python/end_to_end_tensorflow_mnist/requirements.txt samples_mod/python/end_to_end_tensorflow_mnist/requirements.txt
---- samples/python/end_to_end_tensorflow_mnist/requirements.txt	2020-01-30 19:39:00.090019689 +0000
-+++ samples_mod/python/end_to_end_tensorflow_mnist/requirements.txt	2020-01-30 20:21:53.123450268 +0000
+--- samples/python/end_to_end_tensorflow_mnist/requirements.txt	2020-10-06 21:02:27.000000000 +0000
++++ samples_mod/python/end_to_end_tensorflow_mnist/requirements.txt	2020-11-18 04:02:05.644889670 +0000
 @@ -1,4 +1,4 @@
  numpy
- Pillow
+-Pillow==6.2.2
++Pillow
  pycuda
--tensorflow < 2.0
+-tensorflow==1.15.3
 +tensorflow
 diff -Naur samples/python/end_to_end_tensorflow_mnist/sample.py samples_mod/python/end_to_end_tensorflow_mnist/sample.py
---- samples/python/end_to_end_tensorflow_mnist/sample.py	2020-01-30 19:39:00.090019689 +0000
-+++ samples_mod/python/end_to_end_tensorflow_mnist/sample.py	2020-01-30 19:42:37.161041429 +0000
+--- samples/python/end_to_end_tensorflow_mnist/sample.py	2020-10-06 21:02:28.000000000 +0000
++++ samples_mod/python/end_to_end_tensorflow_mnist/sample.py	2020-11-18 04:03:44.040256564 +0000
 @@ -67,9 +67,9 @@
  
  class ModelData(object):
      MODEL_FILE = "lenet5.uff"
 -    INPUT_NAME ="input_1"
-+    INPUT_NAME ="x"
++    INPUT_NAME = "x"
      INPUT_SHAPE = (1, 28, 28)
 -    OUTPUT_NAME = "dense_1/Softmax"
 +    OUTPUT_NAME = "Identity"
@@ -119,8 +120,8 @@ diff -Naur samples/python/end_to_end_tensorflow_mnist/sample.py samples_mod/pyth
  def build_engine(model_file):
      # For more information on TRT basics, refer to the introductory samples.
 diff -Naur samples/python/uff_ssd/utils/inference.py samples_mod/python/uff_ssd/utils/inference.py
---- samples/python/uff_ssd/utils/inference.py	2020-01-30 19:39:00.090019689 +0000
-+++ samples_mod/python/uff_ssd/utils/inference.py	2020-01-30 19:27:09.609378646 +0000
+--- samples/python/uff_ssd/utils/inference.py	2020-10-06 21:02:40.000000000 +0000
++++ samples_mod/python/uff_ssd/utils/inference.py	2020-11-18 04:05:52.541735717 +0000
 @@ -53,6 +53,7 @@
  
  import tensorrt as trt
@@ -141,8 +142,8 @@ diff -Naur samples/python/uff_ssd/utils/inference.py samples_mod/python/uff_ssd/
                  od_graph_def.ParseFromString(serialized_graph)
                  tf.import_graph_def(od_graph_def, name='')
 diff -Naur samples/sampleMovieLens/sampleMovieLensTraining.patch samples_mod/sampleMovieLens/sampleMovieLensTraining.patch
---- samples/sampleMovieLens/sampleMovieLensTraining.patch	2020-01-30 19:39:00.130018034 +0000
-+++ samples_mod/sampleMovieLens/sampleMovieLensTraining.patch	2020-01-30 19:27:09.609378646 +0000
+--- samples/sampleMovieLens/sampleMovieLensTraining.patch	2020-10-06 21:02:08.000000000 +0000
++++ samples_mod/sampleMovieLens/sampleMovieLensTraining.patch	2020-11-18 04:07:17.000050643 +0000
 @@ -132,7 +132,7 @@
  +        )
  +
