@@ -90,7 +90,6 @@ outputs:
            - tensorrt {{ tensorrt_version }}
            - python {{ python }}
            - onnx {{ onnx }}
-           - typing {{ typing }}
            - pillow {{ pillow }}
            - requests {{ requests }}
            - cmake {{ cmake }}
