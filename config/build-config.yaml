@@ -1,22 +1,38 @@
 recipes:
-  - name : libclock_gettime_wrapper    #[x86_64]
-    path : libclock_gettime_wrapper    #[x86_64]
-
-  - name : libmemcpy_wrapper           #[x86_64]
-    path : libmemcpy_wrapper           #[x86_64]
-
-  - name : onnx-graphsurgeon
-    path : tensorrt-onnx-graphsurgeon
-    local_src_dir: ../../local_files
-
+{% if cudatoolkit == '10.2' %}
   - name : graphsurgeon
-    path : tensorrt-graphsurgeon
+    path : tensorrt7.0/tensorrt-graphsurgeon
     local_src_dir: ../../local_files
 
   - name : uff
-    path : tensorrt-uff
+    path : tensorrt7.0/tensorrt-uff
     local_src_dir: ../../local_files
 
   - name : tensorrt
-    path : tensorrt
+    path : tensorrt7.0/tensorrt
     local_src_dir: ../../local_files
+{% endif %}
+
+{% if cudatoolkit == '11.0' %}
+  - name : tensorrt7.2/libclock_gettime_wrapper    #[x86_64]
+    path : tensorrt7.2/libclock_gettime_wrapper    #[x86_64]
+
+  - name : tensorrt7.2/libmemcpy_wrapper           #[x86_64]
+    path : tensorrt7.2/libmemcpy_wrapper           #[x86_64]
+
+  - name : onnx-graphsurgeon
+    path : tensorrt7.2/tensorrt-onnx-graphsurgeon
+    local_src_dir: ../../local_files
+
+  - name : graphsurgeon
+    path : tensorrt7.2/tensorrt-graphsurgeon
+    local_src_dir: ../../local_files
+
+  - name : uff
+    path : tensorrt7.2/tensorrt-uff
+    local_src_dir: ../../local_files
+
+  - name : tensorrt
+    path : tensorrt7.2/tensorrt
+    local_src_dir: ../../local_files
+{% endif %}
