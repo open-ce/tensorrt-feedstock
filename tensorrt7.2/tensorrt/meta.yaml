@@ -40,7 +40,7 @@ source:
     folder: TensorRT
 
 build:
-  number: 3
+  number: 1
   string: cuda{{ cudatoolkit | replace(".*", "") }}_py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }}
   activate_in_script: True
   script_env:
@@ -53,7 +53,7 @@ outputs:
          build:
            - {{ compiler('cxx') }}
            - cmake {{ cmake }}
-           - make {{ make }}
+           - make
          host:
            - python {{ python }}
            - protobuf {{ protobuf }}
@@ -81,15 +81,13 @@ outputs:
          build:
            - {{ compiler('cxx') }}
            - cmake {{ cmake }}
-           - make {{ make }}
+           - make
          host:
            - python {{ python }}
            - protobuf {{ protobuf }}
            - libprotobuf {{ protobuf }}
            - cudnn {{ cudnn }}
            - tensorrt {{ tensorrt_version }}
-           - libmemcpy_wrapper           #[x86_64]
-           - libclock_gettime_wrapper    #[x86_64]
 
          run:
            - decorator
@@ -100,12 +98,10 @@ outputs:
            - pillow {{ pillow }}
            - requests {{ requests }}
            - cmake {{ cmake }}
-           - make  {{ make }}
+           - make
            - numpy {{ numpy }}
            - gxx_linux-64       {{ cxx_compiler_version }} # [x86_64]
            - gxx_linux-ppc64le  {{ cxx_compiler_version }} # [ppc64le]
-           - libmemcpy_wrapper           #[x86_64]
-           - libclock_gettime_wrapper    #[x86_64]
 
 about:
   home: https://developer.nvidia.com/tensorrt
