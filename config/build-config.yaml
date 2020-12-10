@@ -1,4 +1,6 @@
 recipes:
+{% set py_ver = python | float %}
+{% if py_ver < 3.8 %}
 {% if cudatoolkit == '10.2' %}
   - name : graphsurgeon
     path : tensorrt7.0/tensorrt-graphsurgeon
@@ -36,3 +38,5 @@ recipes:
     path : tensorrt7.2/tensorrt
     local_src_dir: ../../local_files
 {% endif %}
+{% endif %}
+
