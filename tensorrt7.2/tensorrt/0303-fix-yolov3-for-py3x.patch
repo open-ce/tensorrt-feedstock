@@ -1,0 +1,16 @@
+--- samples/python/yolov3_onnx/yolov3_to_onnx.py        2020-08-20 13:20:22.000000000 -0500
++++ samples_mod/python/yolov3_onnx/yolov3_to_onnx.py    2020-11-16 13:29:18.253474766 -0600
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env python2
+ #
+ # Copyright 1993-2020 NVIDIA Corporation.  All rights reserved.
+ #
+@@ -89,7 +88,7 @@
+         Keyword argument:
+         cfg_file_path -- path to the yolov3.cfg file as string
+         """
+-        with open(cfg_file_path) as cfg_file:
++        with open(cfg_file_path, 'r') as cfg_file:
+             remainder = cfg_file.read()
+             while remainder is not None:
+                 layer_dict, layer_name, remainder = self._next_layer(remainder)

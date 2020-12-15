@@ -1,0 +1,26 @@
+package:
+  name: libmemcpy_wrapper
+  version: 2.14
+
+source:
+  - path: ./
+
+build:
+  number: 1
+  string: {{ PKG_BUILDNUM }}
+  
+requirements:
+  build:
+    - {{ compiler('c') }}
+
+about:
+  home: open-ce
+  license: apache-2
+  summary: summary
+  description: |
+    This is a wrapper package to map memcpy_GLIBC_2.2.5 to GLIBC_2.17
+  doc_url: 
+
+extra:
+  recipe-maintainers:
+    - open-ce/open-ce-dev-team

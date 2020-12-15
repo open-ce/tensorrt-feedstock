@@ -1,0 +1,155 @@
+diff -Naur samples/python/end_to_end_tensorflow_mnist/README.md samples_mod/python/end_to_end_tensorflow_mnist/README.md
+--- samples/python/end_to_end_tensorflow_mnist/README.md	2020-10-06 21:02:27.000000000 +0000
++++ samples_mod/python/end_to_end_tensorflow_mnist/README.md	2020-11-18 04:00:27.661524310 +0000
+@@ -33,14 +33,23 @@
+ You can use the following sample code to freeze a Keras model.
+ ```
+ def save(model, filename):
+-	# First freeze the graph and remove training nodes.
+-	output_names = model.output.op.name
+-	sess = tf.keras.backend.get_session()
+-	frozen_graph = tf.graph_util.convert_variables_to_constants(sess, sess.graph.as_graph_def(), [output_names])
+-	frozen_graph = tf.graph_util.remove_training_nodes(frozen_graph)
+-	# Save the model
+-	with open(filename, "wb") as ofile:
+-		ofile.write(frozen_graph.SerializeToString())
++     # TF2 style frozen model
++     # Start with saved model format
++     tf.saved_model.save(model, "./models")
++
++     # convert to keras model concrete function
++     full_model = tf.function(lambda x: model(x))
++     full_model = full_model.get_concrete_function(tf.TensorSpec(model.inputs[0].shape, model.inputs[0].dtype))
++
++     # Get frozen ConcreteFunction
++     frozen_func = convert_variables_to_constants_v2(full_model)
++     frozen_func.graph.as_graph_def()
++
++     # Save frozen graph from frozen ConcreteFunction
++     tf.io.write_graph(graph_or_graph_def=frozen_func.graph,
++                       logdir="./models",
++                       name=filename,
++                       as_text=False)
+ ```
+ 
+ ## Prerequisites
+@@ -69,7 +78,7 @@
+ 	```
+ 
+ 2.  Convert the `.pb` file to `.uff` using the convert-to-uff utility:
+-	`convert-to-uff models/lenet5.pb`
++        `convert-to-uff lenet5.pb -t -O Identity -o lenet5.uff`
+ 
+ 	Depending on how you installed TensorRT, this utility may also be located in `/usr/lib/python2.7/dist-packages/uff/bin/convert_to_uff.py` or `/usr/lib/python<PYTHON3 VERSION>/site-packages/uff/bin/convert_to_uff.py`.
+ 
+diff -Naur samples/python/end_to_end_tensorflow_mnist/model.py samples_mod/python/end_to_end_tensorflow_mnist/model.py
+--- samples/python/end_to_end_tensorflow_mnist/model.py	2020-10-06 21:02:27.000000000 +0000
++++ samples_mod/python/end_to_end_tensorflow_mnist/model.py	2020-11-18 04:01:42.630803855 +0000
+@@ -50,6 +50,7 @@
+ # This file contains functions for training a TensorFlow model
+ import tensorflow as tf
+ import numpy as np
++from tensorflow.python.framework.convert_to_constants import convert_variables_to_constants_v2
+ 
+ def process_dataset():
+     # Import the data
+@@ -73,14 +74,23 @@
+     return model
+ 
+ def save(model, filename):
+-    # First freeze the graph and remove training nodes.
+-    output_names = model.output.op.name
+-    sess = tf.keras.backend.get_session()
+-    frozen_graph = tf.graph_util.convert_variables_to_constants(sess, sess.graph.as_graph_def(), [output_names])
+-    frozen_graph = tf.graph_util.remove_training_nodes(frozen_graph)
+-    # Save the model
+-    with open(filename, "wb") as ofile:
+-        ofile.write(frozen_graph.SerializeToString())
++    # TF2 style frozen model
++    # Start with saved model format
++    tf.saved_model.save(model, "./models")
++    
++    # convert to keras model concrete function
++    full_model = tf.function(lambda x: model(x))
++    full_model = full_model.get_concrete_function(tf.TensorSpec(model.inputs[0].shape, model.inputs[0].dtype))
++
++    # Get frozen ConcreteFunction
++    frozen_func = convert_variables_to_constants_v2(full_model)
++    frozen_func.graph.as_graph_def()
++
++    # Save frozen graph from frozen ConcreteFunction
++    tf.io.write_graph(graph_or_graph_def=frozen_func.graph,
++                      logdir="./models",
++                      name=filename,
++                      as_text=False)
+ 
+ def main():
+     x_train, y_train, x_test, y_test = process_dataset()
+@@ -89,7 +99,7 @@
+     model.fit(x_train, y_train, epochs = 5, verbose = 1)
+     # Evaluate the model on test data
+     model.evaluate(x_test, y_test)
+-    save(model, filename="models/lenet5.pb")
++    save(model, filename="lenet5.pb")
+ 
+ if __name__ == '__main__':
+     main()
+diff -Naur samples/python/end_to_end_tensorflow_mnist/requirements.txt samples_mod/python/end_to_end_tensorflow_mnist/requirements.txt
+--- samples/python/end_to_end_tensorflow_mnist/requirements.txt	2020-10-06 21:02:27.000000000 +0000
++++ samples_mod/python/end_to_end_tensorflow_mnist/requirements.txt	2020-11-18 04:02:05.644889670 +0000
+@@ -1,4 +1,4 @@
+ numpy
+-Pillow==6.2.2
++Pillow
+ pycuda
+-tensorflow==1.15.3
++tensorflow
+diff -Naur samples/python/end_to_end_tensorflow_mnist/sample.py samples_mod/python/end_to_end_tensorflow_mnist/sample.py
+--- samples/python/end_to_end_tensorflow_mnist/sample.py	2020-10-06 21:02:28.000000000 +0000
++++ samples_mod/python/end_to_end_tensorflow_mnist/sample.py	2020-11-18 04:03:44.040256564 +0000
+@@ -67,9 +67,9 @@
+ 
+ class ModelData(object):
+     MODEL_FILE = "lenet5.uff"
+-    INPUT_NAME ="input_1"
++    INPUT_NAME = "x"
+     INPUT_SHAPE = (1, 28, 28)
+-    OUTPUT_NAME = "dense_1/Softmax"
++    OUTPUT_NAME = "Identity"
+ 
+ def build_engine(model_file):
+     # For more information on TRT basics, refer to the introductory samples.
+diff -Naur samples/python/uff_ssd/utils/inference.py samples_mod/python/uff_ssd/utils/inference.py
+--- samples/python/uff_ssd/utils/inference.py	2020-10-06 21:02:40.000000000 +0000
++++ samples_mod/python/uff_ssd/utils/inference.py	2020-11-18 04:05:52.541735717 +0000
+@@ -53,6 +53,7 @@
+ 
+ import tensorrt as trt
+ import tensorflow as tf
++from tensorflow.python import GraphDef
+ from PIL import Image
+ import pycuda.driver as cuda
+ import pycuda.autoinit
+@@ -233,8 +234,8 @@
+     def __init__(self, pb_model_path):
+         self.detection_graph = tf.Graph()
+         with self.detection_graph.as_default():
+-            od_graph_def = tf.GraphDef()
+-            with tf.gfile.GFile(pb_model_path, 'rb') as fid:
++            od_graph_def = GraphDef()
++            with tf.io.gfile.GFile(pb_model_path, 'rb') as fid:
+                 serialized_graph = fid.read()
+                 od_graph_def.ParseFromString(serialized_graph)
+                 tf.import_graph_def(od_graph_def, name='')
+diff -Naur samples/sampleMovieLens/sampleMovieLensTraining.patch samples_mod/sampleMovieLens/sampleMovieLensTraining.patch
+--- samples/sampleMovieLens/sampleMovieLensTraining.patch	2020-10-06 21:02:08.000000000 +0000
++++ samples_mod/sampleMovieLens/sampleMovieLensTraining.patch	2020-11-18 04:07:17.000050643 +0000
+@@ -132,7 +132,7 @@
+ +        )
+ +
+ +        # finally we serialize and dump the output graph to the filesystem
+-+        with tf.gfile.GFile(output_graph_filename, "wb") as f:
+++        with tf.io.gfile.GFile(output_graph_filename, "wb") as f:
+ +            f.write(output_graph_def.SerializeToString())
+ +
+ +        print("[FREEZE_INFO] ", len(output_graph_def.node), " ops in the final graph.")

@@ -1,0 +1,37 @@
+diff -Naur a/TensorRT/CMakeLists.txt b/TensorRT/CMakeLists.txt
+--- a/TensorRT/CMakeLists.txt	2020-11-16 13:51:53.033378417 -0600
++++ b/TensorRT/CMakeLists.txt	2020-11-16 14:00:39.330336219 -0600
+@@ -56,6 +56,7 @@
+ option(BUILD_PLUGINS "Build TensorRT plugin" ON)
+ option(BUILD_PARSERS "Build TensorRT parsers" ON)
+ option(BUILD_SAMPLES "Build TensorRT samples" ON)
++option(BUILD_ONNX2TRT "Build onnx2trt executable" ON)
+ 
+ set(CMAKE_CXX_STANDARD 11)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+@@ -184,7 +185,7 @@
+     find_library_create_target(nvinfer_plugin nvinfer_plugin SHARED ${TRT_OUT_DIR} ${TRT_LIB_DIR})
+ endif()
+ 
+-if(BUILD_PARSERS)
++if(BUILD_PARSERS OR BUILD_ONNX2TRT)
+     add_subdirectory(parsers)
+ else()
+     find_library_create_target(nvcaffeparser nvparsers SHARED ${TRT_OUT_DIR} ${TRT_LIB_DIR})
+diff -Naur a/TensorRT/parsers/CMakeLists.txt b/TensorRT/parsers/CMakeLists.txt
+--- a/TensorRT/parsers/CMakeLists.txt	2020-11-16 13:51:53.046378589 -0600
++++ b/TensorRT/parsers/CMakeLists.txt	2020-11-16 14:02:24.536727076 -0600
+@@ -14,6 +14,7 @@
+ # limitations under the License.
+ #
+ 
++if(BUILD_PARSERS)
+ add_custom_target(parsers DEPENDS 
+     nvcaffeparserlibs
+     nvonnxparser
+@@ -31,4 +32,5 @@
+    ${Protobuf_INCLUDE_DIR}
+ )
+ 
++endif()
+ add_subdirectory(onnx)
