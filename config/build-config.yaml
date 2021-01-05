@@ -16,12 +16,6 @@ recipes:
 {% endif %}
 
 {% if cudatoolkit == '11.0' %}
-  - name : tensorrt7.2/libclock_gettime_wrapper    #[x86_64]
-    path : tensorrt7.2/libclock_gettime_wrapper    #[x86_64]
-
-  - name : tensorrt7.2/libmemcpy_wrapper           #[x86_64]
-    path : tensorrt7.2/libmemcpy_wrapper           #[x86_64]
-
   - name : onnx-graphsurgeon
     path : tensorrt7.2/tensorrt-onnx-graphsurgeon
     local_src_dir: ../../local_files
