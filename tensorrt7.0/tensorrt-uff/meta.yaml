@@ -17,7 +17,7 @@ source:
     folder: tensorrt
 
 build:
-  number: 1
+  number: 2
   string: py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }}
   
 requirements:
@@ -30,6 +30,7 @@ requirements:
 about:
   home: https://developer.nvidia.com/tensorrt
   license: NVIDIA Software License
+  license_family: Proprietary
   summary: The uff package contains a set of utilites to convert trained models from various frameworks to a common format.
   description: |
     The uff package contains a set of utilites to convert trained models from various frameworks to a common format.
