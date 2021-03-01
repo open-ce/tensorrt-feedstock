@@ -17,7 +17,7 @@ source:
     folder: tensorrt
 
 build:
-  number: 2 
+  number: 2
   string: py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }}
   
 requirements:

@@ -40,7 +40,7 @@ source:
     folder: TensorRT
 
 build:
-  number: 5 
+  number: 5
   string: cuda{{ cudatoolkit | replace(".*", "") }}_py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }}
   activate_in_script: True
   script_env:
