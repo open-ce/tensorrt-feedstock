@@ -40,7 +40,7 @@ source:
     folder: TensorRT
 
 build:
-  number: 4
+  number: 5 
   string: cuda{{ cudatoolkit | replace(".*", "") }}_py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }}
   activate_in_script: True
   script_env:
@@ -101,6 +101,7 @@ outputs:
 about:
   home: https://developer.nvidia.com/tensorrt
   license: NVIDIA Software License, Apache-2.0
+  license_family: Proprietary
   summary: TensorRT is a C++ library for high performance inference on NVIDIA GPUs and deep learning accelerators.
   description: |
     NVIDIA TensorRT is a platform for high-performance deep learning inference. 
