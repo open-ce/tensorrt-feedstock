@@ -40,7 +40,7 @@ source:
     folder: TensorRT
 
 build:
-  number: 6
+  number: 7
   string: h{{ PKG_HASH }}_cuda{{ cudatoolkit | replace(".*", "") }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }}
   activate_in_script: True
   script_env:
@@ -52,6 +52,9 @@ outputs:
      requirements:
          build:
            - {{ compiler('cxx') }}
+           # Use pins to control cos6/cos7 match
+           - libgcc-ng  {{ libgcc }}
+           - libstdcxx-ng  {{ libstdcxx }}
            - cmake {{ cmake }}
            - make
          host:
@@ -75,6 +78,9 @@ outputs:
      requirements:
          build:
            - {{ compiler('cxx') }}
+           # Use pins to control cos6/cos7 match
+           - libgcc-ng  {{ libgcc }}
+           - libstdcxx-ng  {{ libstdcxx }}
            - cmake {{ cmake }}
            - make
          host:
