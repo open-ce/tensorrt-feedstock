@@ -62,6 +62,11 @@ outputs:
            - protobuf {{ protobuf }}
            - libprotobuf {{ protobuf }}
            - cudnn {{ cudnn }}
+           - libmemcpy_wrapper            #[x86_64]
+           - libclock_gettime_wrapper     #[x86_64]
+           # Use pins to control cos6/cos7 match
+           - libgcc-ng  {{ libgcc }}
+           - libstdcxx-ng  {{ libstdcxx }}
 
          run:
            - python {{ python }}
@@ -72,6 +77,8 @@ outputs:
            - numpy {{ numpy }}
            - uff {{ uff }}
            - graphsurgeon {{ graphsurgeon }}
+           - libmemcpy_wrapper            #[x86_64]
+           - libclock_gettime_wrapper     #[x86_64]
 
    - name: tensorrt-samples
      script: build-tensorrt-samples.sh
@@ -89,6 +96,9 @@ outputs:
            - libprotobuf {{ protobuf }}
            - cudnn {{ cudnn }}
            - tensorrt {{ tensorrt_version }}
+           # Use pins to control cos6/cos7 match
+           - libgcc-ng  {{ libgcc }}
+           - libstdcxx-ng  {{ libstdcxx }}
 
          run:
            - decorator

@@ -64,6 +64,9 @@ outputs:
            - cudnn {{ cudnn }}
            - libmemcpy_wrapper            #[x86_64]
            - libclock_gettime_wrapper     #[x86_64]
+           # Use pins to control cos6/cos7 match
+           - libgcc-ng  {{ libgcc }}
+           - libstdcxx-ng  {{ libstdcxx }}
 
          run:
            - python {{ python }}
@@ -94,6 +97,9 @@ outputs:
            - libprotobuf {{ protobuf }}
            - cudnn {{ cudnn }}
            - tensorrt {{ tensorrt_version }}
+           # Use pins to control cos6/cos7 match
+           - libgcc-ng  {{ libgcc }}
+           - libstdcxx-ng  {{ libstdcxx }}
 
          run:
            - decorator
