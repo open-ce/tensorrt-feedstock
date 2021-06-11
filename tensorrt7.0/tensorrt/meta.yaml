@@ -114,6 +114,13 @@ outputs:
            - gxx_linux-64       {{ cxx_compiler_version }} # [x86_64]
            - gxx_linux-ppc64le  {{ cxx_compiler_version }} # [ppc64le]
 
+test:
+  requires:
+    # Use pins to control cos6/cos7 match       
+    - libgcc-ng  {{ libgcc }}
+    - libstdcxx-ng  {{ libstdcxx }}
+
+
 about:
   home: https://developer.nvidia.com/tensorrt
   license: NVIDIA Software License, Apache-2.0
