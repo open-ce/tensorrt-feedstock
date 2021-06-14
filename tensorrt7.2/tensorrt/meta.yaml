@@ -42,7 +42,6 @@ source:
 build:
   number: 5
   string: h{{ PKG_HASH }}_cuda{{ cudatoolkit | replace(".*", "") }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }}
-  activate_in_script: True
   script_env:
     - CUDA_HOME
   ignore_run_exports:
