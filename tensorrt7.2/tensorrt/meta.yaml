@@ -40,11 +40,13 @@ source:
     folder: TensorRT
 
 build:
-  number: 4
+  number: 5
   string: h{{ PKG_HASH }}_cuda{{ cudatoolkit | replace(".*", "") }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }}
-  activate_in_script: True
   script_env:
     - CUDA_HOME
+  ignore_run_exports:
+    - libgcc-ng
+    - libstdcxx-ng
 
 outputs:
    - name: tensorrt
@@ -52,6 +54,9 @@ outputs:
      requirements:
          build:
            - {{ compiler('cxx') }}
+           # Use pins to control cos6/cos7 match
+           - libgcc-ng  {{ libgcc }}
+           - libstdcxx-ng  {{ libstdcxx }}
            - cmake {{ cmake }}
            - make
          host:
@@ -61,6 +66,9 @@ outputs:
            - cudnn {{ cudnn }}
            - libmemcpy_wrapper            #[x86_64]
            - libclock_gettime_wrapper     #[x86_64]
+           # Use pins to control cos6/cos7 match
+           - libgcc-ng  {{ libgcc }}
+           - libstdcxx-ng  {{ libstdcxx }}
 
          run:
            - python {{ python }}
@@ -74,12 +82,18 @@ outputs:
            - onnx-graphsurgeon {{ onnx_graphsurgeon }}
            - libmemcpy_wrapper            #[x86_64]
            - libclock_gettime_wrapper     #[x86_64]
+           # Use pins to control cos6/cos7 match
+           - libgcc-ng  {{ libgcc }}
+           - libstdcxx-ng  {{ libstdcxx }}
 
    - name: tensorrt-samples
      script: build-tensorrt-samples.sh
      requirements:
          build:
            - {{ compiler('cxx') }}
+           # Use pins to control cos6/cos7 match
+           - libgcc-ng  {{ libgcc }}
+           - libstdcxx-ng  {{ libstdcxx }}
            - cmake {{ cmake }}
            - make
          host:
@@ -88,6 +102,9 @@ outputs:
            - libprotobuf {{ protobuf }}
            - cudnn {{ cudnn }}
            - tensorrt {{ tensorrt_version }}
+           # Use pins to control cos6/cos7 match
+           - libgcc-ng  {{ libgcc }}
+           - libstdcxx-ng  {{ libstdcxx }}
 
          run:
            - decorator
@@ -102,6 +119,9 @@ outputs:
            - numpy {{ numpy }}
            - gxx_linux-64       {{ cxx_compiler_version }} # [x86_64]
            - gxx_linux-ppc64le  {{ cxx_compiler_version }} # [ppc64le]
+           # Use pins to control cos6/cos7 match
+           - libgcc-ng  {{ libgcc }}
+           - libstdcxx-ng  {{ libstdcxx }}
 
 about:
   home: https://developer.nvidia.com/tensorrt
