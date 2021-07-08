@@ -1,36 +1,23 @@
 recipes:
 {% if build_type == 'cuda' %}
 {% set py_ver = python | float %}
-{% if py_ver < 3.8 %}
-{% if cudatoolkit == '10.2' %}
-  - name : graphsurgeon
-    path : tensorrt7.0/tensorrt-graphsurgeon
-    local_src_dir: ../../local_files
+{% if py_ver < 3.9 %}
 
-  - name : uff
-    path : tensorrt7.0/tensorrt-uff
-    local_src_dir: ../../local_files
-
-  - name : tensorrt
-    path : tensorrt7.0/tensorrt
-    local_src_dir: ../../local_files
-{% endif %}
-
-{% if cudatoolkit == '11.0' %}
+{% if cudatoolkit >= '11.0' %}
   - name : onnx-graphsurgeon
-    path : tensorrt7.2/tensorrt-onnx-graphsurgeon
+    path : tensorrt7.2.3/tensorrt-onnx-graphsurgeon
     local_src_dir: ../../local_files
 
   - name : graphsurgeon
-    path : tensorrt7.2/tensorrt-graphsurgeon
+    path : tensorrt7.2.3/tensorrt-graphsurgeon
     local_src_dir: ../../local_files
 
   - name : uff
-    path : tensorrt7.2/tensorrt-uff
+    path : tensorrt7.2.3/tensorrt-uff
     local_src_dir: ../../local_files
 
   - name : tensorrt
-    path : tensorrt7.2/tensorrt
+    path : tensorrt7.2.3/tensorrt
     local_src_dir: ../../local_files
 {% endif %}
 {% endif %}

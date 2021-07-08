@@ -1,9 +1,8 @@
-{% set tensorrt_version = "7.0.0.11" %}
-{% set sha256 = "03ce0427686e19d60919f6ba68dea5446a26ac53f4398bdea4ec96aec30740e7" %}    #[ppc64le]
-{% set trt_tar = "TensorRT-7.0.0.11.CentOS-7.6.ppc64le-gnu.cuda-10.2.cudnn7.6.tar.gz" %} #[ppc64le]
-
-{% set sha256 = "92fab8aa1de9e5bb6904940e840d553bf64caf39ed5fd6a749297c95e3619051" %}    #[x86_64]
-{% set trt_tar = "TensorRT-7.0.0.11.CentOS-7.6.x86_64-gnu.cuda-10.2.cudnn7.6.tar.gz" %}  #[x86_64]
+{% set tensorrt_version = "7.2.3.4" %}
+{% set sha256 = "ac07228bfd07f2fc3b9cb0b0f53f48af7537ad69399c4bdc69d7dcfe3fb85df9" %}   #[(x86_64) and (cudatoolkit == '11.0')]
+{% set trt_tar = "TensorRT-7.2.3.4.CentOS-7.9.x86_64-gnu.cuda-11.0.cudnn8.1.tar.gz" %}  #[(x86_64) and (cudatoolkit == '11.0')]
+{% set sha256 = "95b50a53e4a36be14aff9bf7bb6eab0858933b03e0f8c5949dfe2265a6ce9969" %}   #[(x86_64) and (cudatoolkit == '11.2')]
+{% set trt_tar = "TensorRT-7.2.3.4.CentOS-7.9.x86_64-gnu.cuda-11.1.cudnn8.1.tar.gz" %}  #[(x86_64) and (cudatoolkit == '11.2')]
 
 {% set trt_tar_dir =  environ.get('LOCAL_SRC_DIR', 0) %}
 
@@ -24,7 +23,7 @@ source:
     folder: tensorrt
 
   - git_url: "https://github.com/NVIDIA/TensorRT.git"
-    git_tag: v7.0.0
+    git_tag: 21.06
     patches:
        # 02xx - GPU only patch specific to open-ce (maybe)
        - 0201-add-build-onnx2trt-flag.patch
@@ -35,18 +34,18 @@ source:
        - 0301-fix-GLIBC_2.14-link-issue-with-libnvinfer.so.patch # [x86_64]
        - 0302-Fix-libcaffeparser-name-for-samples.patch
        - 0304-modified-print-function-syntax-as-per-py3.patch
-       - 0305-trtexec-int8-cal-fix.patch 
        #- add-makefiles-for-new-samples.patch
     folder: TensorRT
 
 build:
-  number: 7
+  number: 1
   string: h{{ PKG_HASH }}_cuda{{ cudatoolkit | replace(".*", "") }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }}
   script_env:
     - CUDA_HOME
   ignore_run_exports:
     - libgcc-ng
     - libstdcxx-ng
+  skip: True  #[ppc64le]
 
 outputs:
    - name: tensorrt
@@ -64,6 +63,8 @@ outputs:
            - protobuf {{ protobuf }}
            - libprotobuf {{ protobuf }}
            - cudnn {{ cudnn }}
+           - libmemcpy_wrapper            #[x86_64]
+           - libclock_gettime_wrapper     #[x86_64]
            # Use pins to control cos6/cos7 match
            - libgcc-ng  {{ libgcc }}
            - libstdcxx-ng  {{ libstdcxx }}
@@ -77,10 +78,12 @@ outputs:
            - numpy {{ numpy }}
            - uff {{ uff }}
            - graphsurgeon {{ graphsurgeon }}
+           - onnx-graphsurgeon {{ onnx_graphsurgeon }}
+           - libmemcpy_wrapper            #[x86_64]
+           - libclock_gettime_wrapper     #[x86_64]
            # Use pins to control cos6/cos7 match
            - libgcc-ng  {{ libgcc }}
            - libstdcxx-ng  {{ libstdcxx }}
-
 
    - name: tensorrt-samples
      script: build-tensorrt-samples.sh
@@ -122,7 +125,6 @@ outputs:
 about:
   home: https://developer.nvidia.com/tensorrt
   license: NVIDIA Software License, Apache-2.0
-  license_family: Proprietary
   summary: TensorRT is a C++ library for high performance inference on NVIDIA GPUs and deep learning accelerators.
   description: |
     NVIDIA TensorRT is a platform for high-performance deep learning inference. 
