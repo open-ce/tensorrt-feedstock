@@ -40,13 +40,10 @@ source:
     folder: TensorRT
 
 build:
-  number: 7
+  number: 8
   string: h{{ PKG_HASH }}_cuda{{ cudatoolkit | replace(".*", "") }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }}
   script_env:
     - CUDA_HOME
-  ignore_run_exports:
-    - libgcc-ng
-    - libstdcxx-ng
 
 outputs:
    - name: tensorrt
@@ -77,9 +74,6 @@ outputs:
            - numpy {{ numpy }}
            - uff {{ uff }}
            - graphsurgeon {{ graphsurgeon }}
-           # Use pins to control cos6/cos7 match
-           - libgcc-ng  {{ libgcc }}
-           - libstdcxx-ng  {{ libstdcxx }}
 
 
    - name: tensorrt-samples
@@ -115,9 +109,6 @@ outputs:
            - numpy {{ numpy }}
            - gxx_linux-64       {{ cxx_compiler_version }} # [x86_64]
            - gxx_linux-ppc64le  {{ cxx_compiler_version }} # [ppc64le]
-           # Use pins to control cos6/cos7 match
-           - libgcc-ng  {{ libgcc }}
-           - libstdcxx-ng  {{ libstdcxx }}
 
 about:
   home: https://developer.nvidia.com/tensorrt
