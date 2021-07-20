@@ -27,7 +27,7 @@ source:
     patches:
        # 02xx - GPU only patch specific to open-ce (maybe)
        - 0201-add-build-onnx2trt-flag.patch
-       - 0202-only-install-onnx2trt.patch
+       #- 0202-only-install-onnx2trt.patch
        - 0203-Fixed-samples-CMakeLists-for-conda-builds.patch
 
        # 03xx - patch temporary to fix a problem that when fixed upstream can be removed
