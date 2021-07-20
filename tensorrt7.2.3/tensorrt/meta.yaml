@@ -81,9 +81,6 @@ outputs:
            - onnx-graphsurgeon {{ onnx_graphsurgeon }}
            - libmemcpy_wrapper            #[x86_64]
            - libclock_gettime_wrapper     #[x86_64]
-           # Use pins to control cos6/cos7 match
-           - libgcc-ng  {{ libgcc }}
-           - libstdcxx-ng  {{ libstdcxx }}
 
    - name: tensorrt-samples
      script: build-tensorrt-samples.sh
@@ -118,9 +115,6 @@ outputs:
            - numpy {{ numpy }}
            - gxx_linux-64       {{ cxx_compiler_version }} # [x86_64]
            - gxx_linux-ppc64le  {{ cxx_compiler_version }} # [ppc64le]
-           # Use pins to control cos6/cos7 match
-           - libgcc-ng  {{ libgcc }}
-           - libstdcxx-ng  {{ libstdcxx }}
 
 about:
   home: https://developer.nvidia.com/tensorrt

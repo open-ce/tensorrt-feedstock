@@ -36,9 +36,6 @@ requirements:
     - wheel {{ wheel }}
   run:
     - python {{ python }}
-    # Use pins to control cos6/cos7 match
-    - libgcc-ng  {{ libgcc }}
-    - libstdcxx-ng  {{ libstdcxx }}
 
 about:
   home: https://developer.nvidia.com/tensorrt
