@@ -75,9 +75,13 @@ outputs:
            - numpy {{ numpy }}
            - uff {{ uff }}
            - graphsurgeon {{ graphsurgeon }}
+<<<<<<< HEAD:tensorrt7.2.3/tensorrt/meta.yaml
            - onnx-graphsurgeon {{ onnx_graphsurgeon }}
            - libmemcpy_wrapper            #[x86_64]
            - libclock_gettime_wrapper     #[x86_64]
+=======
+
+>>>>>>> 642598ec1b2042a53ea320607899861cd89379d3:tensorrt7.0/tensorrt/meta.yaml
 
    - name: tensorrt-samples
      script: build-tensorrt-samples.sh
