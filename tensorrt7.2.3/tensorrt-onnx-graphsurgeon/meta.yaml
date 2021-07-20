@@ -1,10 +1,8 @@
-{% set version = "0.2.0" %}                                                              #[ppc64le]
-{% set sha256 = "32ea84fb87619ec6b90ca3f4bb9d9dd3d5ca12f6a5f2db9777bfc858d9e62464" %}    #[ppc64le]
-{% set trt_tar = "TensorRT-7.2.0.13.CentOS-8.1.ppc64le-gnu.cuda-11.0.cudnn8.0.tar.gz" %} #[ppc64le]
-
-{% set version = "0.2.6" %}                                                             #[x86_64]
-{% set sha256 = "3d42890424e2a2a155df67aaace45d001a95f12d6781008c5dcf62ea480ea664" %}   #[x86_64]
-{% set trt_tar = "TensorRT-7.2.1.6.CentOS-7.6.x86_64-gnu.cuda-11.0.cudnn8.0.tar.gz" %}  #[x86_64]
+{% set version = "0.2.6" %}
+{% set sha256 = "ac07228bfd07f2fc3b9cb0b0f53f48af7537ad69399c4bdc69d7dcfe3fb85df9" %}   #[(x86_64) and (cudatoolkit == '11.0')]
+{% set trt_tar = "TensorRT-7.2.3.4.CentOS-7.9.x86_64-gnu.cuda-11.0.cudnn8.1.tar.gz" %}  #[(x86_64) and (cudatoolkit == '11.0')]
+{% set sha256 = "95b50a53e4a36be14aff9bf7bb6eab0858933b03e0f8c5949dfe2265a6ce9969" %}   #[(x86_64) and (cudatoolkit == '11.2')]
+{% set trt_tar = "TensorRT-7.2.3.4.CentOS-7.9.x86_64-gnu.cuda-11.1.cudnn8.1.tar.gz" %}  #[(x86_64) and (cudatoolkit == '11.2')]
 
 {% set trt_tar_dir =  environ.get('LOCAL_SRC_DIR', 0) %}
 
@@ -18,8 +16,9 @@ source:
     folder: tensorrt
 
 build:
-  number: 4
+  number: 1
   string: py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }}
+  skip: True  #[ppc64le]
   
 requirements:
   build:
